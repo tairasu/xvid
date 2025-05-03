@@ -14,10 +14,10 @@ typedef struct {
     int zero1;
 } decoder_data_t;
 
-int _cdecl InitializeDivxDecoder(unsigned int index, unsigned int width, unsigned int height);
-int _cdecl SetOutputFormat(unsigned int index, unsigned int one, unsigned int width, unsigned int height);
-int _cdecl DivxDecode(unsigned int index, void *data, unsigned int zero);
-int _cdecl UnInitializeDivxDecoder(unsigned int index);
+int __cdecl InitializeDivxDecoder(unsigned int index, unsigned int width, unsigned int height);
+int __cdecl SetOutputFormat(unsigned int index, unsigned int one, unsigned int width, unsigned int height);
+int __cdecl DivxDecode(unsigned int index, void *data, unsigned int zero);
+int __cdecl UnInitializeDivxDecoder(unsigned int index);
 
 #ifdef __cplusplus
 }

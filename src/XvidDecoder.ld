@@ -11,5 +11,9 @@
 		xvid_plugin_psnr;
 		xvid_plugin_ssim;
 		xvid_plugin_psnrhvsm;
+		InitializeDivxDecoder;
+		SetOutputFormat;
+		DivxDecode;
+		UnInitializeDivxDecoder;
 	local: *;
 };

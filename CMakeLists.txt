@@ -1,5 +1,9 @@
 cmake_minimum_required(VERSION 3.10)
-project(XvidDecoder C ASM_NASM)
+project(XvidDecoder C)
+
+if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    enable_language(ASM_NASM)
+endif()
 
 set(SRC_GENERIC
     src/XvidDecoder.c
@@ -121,15 +125,15 @@ set(ASM_FILES)
 include (TestBigEndian)
 TEST_BIG_ENDIAN(IS_BIG_ENDIAN)
 if(IS_BIG_ENDIAN)
-    add_compile_definitions($<$<COMPILE_LANGUAGE:C>:-DARCH_IS_BIG_ENDIAN>)
+    add_compile_definitions($<$<COMPILE_LANGUAGE:C>:ARCH_IS_BIG_ENDIAN>)
 else()
-    add_compile_definitions($<$<COMPILE_LANGUAGE:C>:-DARCH_IS_LITTLE_ENDIAN>)
+    add_compile_definitions($<$<COMPILE_LANGUAGE:C>:ARCH_IS_LITTLE_ENDIAN>)
 endif()
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-    add_compile_definitions($<$<COMPILE_LANGUAGE:C>:-DARCH_IS_64BIT>)
+    add_compile_definitions($<$<COMPILE_LANGUAGE:C>:ARCH_IS_64BIT>)
 else()
-    add_compile_definitions($<$<COMPILE_LANGUAGE:C>:-DARCH_IS_32BIT>)
+    add_compile_definitions($<$<COMPILE_LANGUAGE:C>:ARCH_IS_32BIT>)
 endif()
 
 if(MSVC)
@@ -150,6 +154,11 @@ if(MSVC)
 
     set(DEF_FILES
         src/XvidDecoder.def
+    )
+elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+    add_compile_definitions($<$<COMPILE_LANGUAGE:C>:ARCH_IS_GENERIC>)
+    set(DEF_FILES
+        src/XvidDecoder.ld
     )
 endif()
 
