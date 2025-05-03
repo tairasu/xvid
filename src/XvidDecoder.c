@@ -12,7 +12,7 @@ static xvid_gbl_init_t g_xvid_init = { 0, 0, 0 };
 static xvid_dec_create_t g_xvid_decoders[XVID_MAX_DECODERS];
 
 
-int __cdecl
+int XVDEC_CALL
 InitializeDivxDecoder(unsigned int index,
                       unsigned int width,
                       unsigned int height)
@@ -56,7 +56,7 @@ InitializeDivxDecoder(unsigned int index,
     return result;
 }
 
-int __cdecl
+int XVDEC_CALL
 SetOutputFormat(unsigned int index,
                 unsigned int one,
                 unsigned int width,
@@ -88,7 +88,7 @@ SetOutputFormat(unsigned int index,
     return 0;
 }
 
-int __cdecl
+int XVDEC_CALL
 DivxDecode(unsigned int index,
            void *data,
            unsigned int zero)
@@ -131,7 +131,7 @@ DivxDecode(unsigned int index,
     return 0;
 }
 
-int __cdecl
+int XVDEC_CALL
 UnInitializeDivxDecoder(unsigned int index)
 {
     if (index < 1 || index >= XVID_MAX_DECODERS) {

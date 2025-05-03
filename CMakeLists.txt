@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 3.10)
 project(XvidDecoder C)
 
-if(NOT ${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+if(${CMAKE_SYSTEM_PROCESSOR} MATCHES "AMD64|EM64T|X86_64|X86|I386|I686")
     enable_language(ASM_NASM)
+    set(IS_X86 ON)
+else()
+    set(IS_X86 OFF)
 endif()
 
 set(SRC_GENERIC
@@ -136,27 +139,35 @@ else()
     add_compile_definitions($<$<COMPILE_LANGUAGE:C>:ARCH_IS_32BIT>)
 endif()
 
-if(MSVC)
-    add_compile_definitions($<$<COMPILE_LANGUAGE:C>:-DHAVE_PTHREAD>)
-    add_compile_definitions($<$<COMPILE_LANGUAGE:C>:-DXVID_HAVE_PADDED_BS_BUFFER>)
-    add_compile_definitions($<$<COMPILE_LANGUAGE:C>:-D_CRT_SECURE_NO_WARNINGS>)
-
+if(IS_X86)
     if (CMAKE_SIZEOF_VOID_P EQUAL 8)
-        add_compile_definitions($<$<COMPILE_LANGUAGE:C>:-DARCH_IS_X86_64>)
-        add_compile_definitions($<$<COMPILE_LANGUAGE:ASM_NASM>:-DNO_PREFIX>)
-        add_compile_definitions($<$<COMPILE_LANGUAGE:ASM_NASM>:-DARCH_IS_X86_64>)
+        add_compile_definitions($<$<COMPILE_LANGUAGE:C>:ARCH_IS_X86_64>)
+        add_compile_definitions($<$<COMPILE_LANGUAGE:ASM_NASM>:NO_PREFIX>)
+        add_compile_definitions($<$<COMPILE_LANGUAGE:ASM_NASM>:ARCH_IS_X86_64>)
     else()
-        add_compile_definitions($<$<COMPILE_LANGUAGE:C>:-DARCH_IS_IA32>)
+        add_compile_definitions($<$<COMPILE_LANGUAGE:C>:ARCH_IS_IA32>)
     endif()
 
-    add_compile_definitions($<$<COMPILE_LANGUAGE:ASM_NASM>:-DWINDOWS>)
+    if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+        add_compile_definitions($<$<COMPILE_LANGUAGE:ASM_NASM>:WINDOWS>)
+    endif()
+
     set(ASM_FILES ${SRC_IA32})
+else()
+    add_compile_definitions($<$<COMPILE_LANGUAGE:C>:ARCH_IS_GENERIC>)
+endif()
+
+if(${CMAKE_SYSTEM_NAME} MATCHES "Windows")
+    if(MSVC)
+        add_compile_definitions($<$<COMPILE_LANGUAGE:C>:HAVE_PTHREAD>)
+        add_compile_definitions($<$<COMPILE_LANGUAGE:C>:XVID_HAVE_PADDED_BS_BUFFER>)
+        add_compile_definitions($<$<COMPILE_LANGUAGE:C>:_CRT_SECURE_NO_WARNINGS>)
+    endif()
 
     set(DEF_FILES
         src/XvidDecoder.def
     )
-elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    add_compile_definitions($<$<COMPILE_LANGUAGE:C>:ARCH_IS_GENERIC>)
+else()
     set(DEF_FILES
         src/XvidDecoder.ld
     )

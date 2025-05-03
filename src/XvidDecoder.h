@@ -5,6 +5,18 @@
 extern "C" {
 #endif
 
+#if defined(ARCH_IS_IA32) && defined(_WIN32)
+#  if defined(_MSC_VER)
+#    define XVDEC_CALL __cdecl
+#  elif defined(__GNUC__) || defined(__clang__)
+#    define XVDEC_CALL __attribute__((cdecl))
+#  else
+#    define XVDEC_CALL
+#endif
+#else
+#  define XVDEC_CALL
+#endif
+
 typedef struct {
     void* output;
     void* input;
@@ -14,10 +26,10 @@ typedef struct {
     int zero1;
 } decoder_data_t;
 
-int __cdecl InitializeDivxDecoder(unsigned int index, unsigned int width, unsigned int height);
-int __cdecl SetOutputFormat(unsigned int index, unsigned int one, unsigned int width, unsigned int height);
-int __cdecl DivxDecode(unsigned int index, void *data, unsigned int zero);
-int __cdecl UnInitializeDivxDecoder(unsigned int index);
+int XVDEC_CALL InitializeDivxDecoder(unsigned int index, unsigned int width, unsigned int height);
+int XVDEC_CALL SetOutputFormat(unsigned int index, unsigned int one, unsigned int width, unsigned int height);
+int XVDEC_CALL DivxDecode(unsigned int index, void *data, unsigned int zero);
+int XVDEC_CALL UnInitializeDivxDecoder(unsigned int index);
 
 #ifdef __cplusplus
 }
