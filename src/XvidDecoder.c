@@ -107,7 +107,7 @@ DivxDecode(unsigned int index,
     frame.version = XVID_VERSION;
     frame.bitstream = d->input;
     frame.length = (int) d->input_size;
-    frame.output.csp = XVID_CSP_BGRA;
+    frame.output.csp = XVID_CSP_BGRA | XVID_CSP_VFLIP;
     frame.output.plane[0] = d->output;
     frame.output.stride[0] = g_xvid_decoders[index].width * 4;
 
