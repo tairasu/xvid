@@ -12,7 +12,7 @@ extern "C" {
 #    define XVDEC_CALL __attribute__((cdecl))
 #  else
 #    define XVDEC_CALL
-#endif
+#  endif
 #else
 #  define XVDEC_CALL
 #endif
