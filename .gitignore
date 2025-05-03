@@ -3,6 +3,7 @@
 .vscode
 .idea
 CMakeSettings.json
+CMakeLists.txt.user
 
 /build
 /cmake-build-*
