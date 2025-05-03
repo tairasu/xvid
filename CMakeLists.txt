@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.10)
 project(XvidDecoder C ASM_NASM)
 
 set(SRC_GENERIC
+    src/XvidDecoder.c
     src/decoder.c
     src/encoder.c
     src/xvid.c
