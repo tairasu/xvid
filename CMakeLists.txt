@@ -1,6 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
 project(XvidDecoder C)
 
+# Use C11 to avoid C23's bool keyword (which conflicts with typedef int bool in encoder.h)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
 string(TOUPPER "${CMAKE_SYSTEM_PROCESSOR}" SYSTEM_PROCESSOR)
 
 if(${SYSTEM_PROCESSOR} MATCHES "AMD64|EM64T|X86_64|X86|I386|I686")
@@ -178,3 +182,12 @@ endif()
 include_directories(src src/image/x86_asm)
 
 add_library(${CMAKE_PROJECT_NAME} SHARED ${SRC_GENERIC} ${ASM_FILES} ${DEF_FILES})
+set_target_properties(${CMAKE_PROJECT_NAME} PROPERTIES OUTPUT_NAME "DivxDecoder" PREFIX "")
+
+# Static link MinGW runtime libraries to avoid external DLL dependencies
+if(MINGW)
+    target_link_options(${CMAKE_PROJECT_NAME} PRIVATE 
+        -static-libgcc
+    )
+endif()
+
